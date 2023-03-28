@@ -23,6 +23,6 @@ C_DEPS :=
 SUBDIRS := \
 Core/Src \
 Core/Startup \
-Core/ssd1306/Src \
+Drivers/SSD1306/Src \
 Drivers/STM32F4xx_HAL_Driver/Src \
 

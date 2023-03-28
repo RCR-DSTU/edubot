@@ -23,11 +23,11 @@
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
-#include "fonts.h"
-#include "ssd1306.h"
+
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "ssd1306.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,9 +105,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  HAL_GPIO_TogglePin(LED_PIN_GPIO_Port,LED_PIN_Pin);
-	  HAL_GPIO_WritePin(LED_PIN_GPIO_Port,LED_PIN_Pin,GPIO_PIN_SET);
-	  HAL_Delay(250);
+	  ssd1306_image(logo_RCR_50x50, 50, 10, 10);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

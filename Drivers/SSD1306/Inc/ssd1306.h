@@ -48,6 +48,7 @@ SDA        |PB7          |Serial data line
 #include "stm32f4xx_hal.h"
 #include "i2c.h"
 #include "fonts.h"
+#include "images.h"
 
 #include "stdlib.h"
 #include "string.h"

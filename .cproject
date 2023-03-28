@@ -42,13 +42,12 @@
 									<listOptionValue builtIn="false" value="STM32F401xC"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.177373629" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/my_car/Core/ssd1306/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/my_car/Core/ssd1306/Src}&quot;"/>
 									<listOptionValue builtIn="false" value="../Core/Inc"/>
 									<listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../Drivers/SSD1306/Inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.707108309" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -127,7 +126,7 @@
 									<listOptionValue builtIn="false" value="/my_car/Core/ssd1306/Src"/>
 									<listOptionValue builtIn="false" value="/my_car/Core/ssd1306/Inc"/>
 									<listOptionValue builtIn="false" value="/my_car/Core/ssd1306"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/my_car/Core/ssd1306/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="../Drivers/SSD1306/Inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.374299190" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

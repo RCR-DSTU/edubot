@@ -34,9 +34,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/usb_otg.h ../Core/Inc/gpio.h \
- C:/Users/User/Documents/STM32/Core/ssd1306/Inc/fonts.h \
- C:/Users/User/Documents/STM32/Core/ssd1306/Inc/ssd1306.h \
- C:/Users/User/Documents/STM32/Core/ssd1306/Inc/fonts.h
+ ../Drivers/SSD1306/Inc/ssd1306.h ../Drivers/SSD1306/Inc/fonts.h \
+ ../Drivers/SSD1306/Inc/images.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -77,6 +76,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/usart.h:
 ../Core/Inc/usb_otg.h:
 ../Core/Inc/gpio.h:
-C:/Users/User/Documents/STM32/Core/ssd1306/Inc/fonts.h:
-C:/Users/User/Documents/STM32/Core/ssd1306/Inc/ssd1306.h:
-C:/Users/User/Documents/STM32/Core/ssd1306/Inc/fonts.h:
+../Drivers/SSD1306/Inc/ssd1306.h:
+../Drivers/SSD1306/Inc/fonts.h:
+../Drivers/SSD1306/Inc/images.h:
