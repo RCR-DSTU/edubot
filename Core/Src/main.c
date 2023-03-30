@@ -97,10 +97,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   SSD1306_Init();
-  char* rcr = "Resourse center of robotics";
-  //SSD1306_Fill(SSD1306_COLOR_BLACK);
   SSD1306_GotoXY(0, 44); //Устанавливаем курсор в позицию 0;44. Сначала по горизонтали, потом вертикали.
-
+  SSD1306_Image(logo_RCR_50x50, 50, 50, 50, 10);
   SSD1306_UpdateScreen();
   /* USER CODE END 2 */
 

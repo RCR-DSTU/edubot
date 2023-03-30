@@ -107,13 +107,16 @@ uint8_t SSD1306_Init(void) {
 }
 
 void SSD1306_UpdateScreen(void) {
-	SSD1306_Buffer_all[0] = 0x40;
-	HAL_I2C_Master_Transmit(&hi2c1, SSD1306_I2C_ADDR, SSD1306_Buffer_all, SSD1306_WIDTH * SSD1306_HEIGHT / 8 + 1, 250);
-	HAL_Delay(5);
-//	while(HAL_DMA_GetState(hi2c1.hdmatx) != HAL_DMA_STATE_READY)
-//	{
-//		HAL_Delay(1); //Change for your RTOS
-//	}
+	uint8_t m;
+
+	for (m = 0; m < 8; m++) {
+		SSD1306_WRITECOMMAND(0xB0 + m);
+		SSD1306_WRITECOMMAND(0x00);
+		SSD1306_WRITECOMMAND(0x10);
+
+		/* Write multi data */
+		ssd1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40, &SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH);
+	}
 }
 
 void SSD1306_ToggleInvert(void) {
@@ -467,23 +470,30 @@ void SSD1306_DrawFilledCircle(int16_t x0, int16_t y0, int16_t r, uint8_t c) {
     }
 }
 
-void ssd1306_image(uint8_t *img, uint8_t frame, uint8_t x, uint8_t y)
+void SSD1306_Image(uint8_t *img, uint8_t hight,uint8_t wight,uint8_t x, uint8_t y)
 {
-	uint32_t i, b, j;
-	
-	b = 0;
-	if(frame >= img[2])
-		return;
-	uint32_t start = (frame * (img[3] + (img[4] << 8)));
-	
-	/* Go through font */
-	for (i = 0; i < img[1]; i++) {
-		for (j = 0; j < img[0]; j++) {
+	uint32_t i, b, j,c = 0;
+    __attribute__((unused)) uint8_t bytes_x, bytes_y, temp, coord_x,coord_y;
 
-			SSD1306_DrawPixel(x + j, (y + i), (uint8_t) (img[b/8 + 5 + start] >> (b%8)) & 1);
-			b++;
-		}
-	}
+    if((hight%8)!=0)    bytes_y=(hight/8+1)*8;
+    else bytes_y=hight;
+
+    if((wight%8)!=0) bytes_x=(wight/8+1)*8;
+    else bytes_x=wight;
+    	b = 0;
+    for(i=0; i<hight; i++){
+        for (j=0; j<bytes_x; j++)
+        {
+            coord_x=x+j;
+            coord_y=y+i;
+            SSD1306_DrawPixel(coord_x, coord_y, (uint8_t) (img[c/8] & 1<<(7-b))>>(7-b) );
+            if(b<7)
+                b++;
+            else
+                b=0;
+            c++;
+        }
+    }
 }
 
 void SSD1306_ON(void) {
