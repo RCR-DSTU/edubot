@@ -97,20 +97,25 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  SSD1306_Init();
 
   FirstScreen();
+  SSD1306_UpdateScreen();
 
+  HAL_Delay(4000);
+  SSD1306_Fill(SSD1306_COLOR_BLACK);
+
+  MenuRectangle();
+  Indicator();
+  ShowMenuItems();
 
   SSD1306_UpdateScreen();
 
-  SSD1306_Fill(SSD1306_COLOR_BLACK);
 
-  SSD1306_DrawRectangle(3, 3, 122, 58, SSD1306_COLOR_WHITE);
 
-//  HAL_Delay(4000);
-//  SSD1306_Fill(SSD1306_COLOR_BLACK);
-//  SSD1306_DrawRectangle(7, 6, 106, 47, SSD1306_COLOR_WHITE);
-//  SSD1306_UpdateScreen();
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
