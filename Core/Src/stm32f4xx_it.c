@@ -20,6 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
+#include "stdbool.h"
+#include "demo.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -205,9 +207,12 @@ void EXTI2_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI2_IRQn 0 */
 //But 1
+
   /* USER CODE END EXTI2_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(EXTI1_Pin);
   /* USER CODE BEGIN EXTI2_IRQn 1 */
+  Indicator(true);
+  NewFrame();
 
   /* USER CODE END EXTI2_IRQn 1 */
 }
@@ -250,7 +255,8 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE END EXTI9_5_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(EXTI4_Pin);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
-
+	Indicator(false);
+	NewFrame();
   /* USER CODE END EXTI9_5_IRQn 1 */
 }
 

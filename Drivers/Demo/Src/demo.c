@@ -1,13 +1,24 @@
 #include "demo.h"
 #include "ssd1306.h"
 
+
 char* rcr = " RCR";
 char* dstu = "DSTU";
 char* menu = "Main menu";
-char* items_menu[] = {"Program #1", "Program #2", "Program #3", "Program #4", "Program #5"};
 
-int show_menu_items_X = 10, show_menu_items_Y = 18;
-int indicator_X = 8, indicator_Y = 16;
+char* items_menu[2][3] = {
+					{"Program #1", "Program #2", "Program #3"},
+					{"Program #4", "Program #5"}
+						 };
+//char* items_menu[] = {"Program #1", "Program #2", "Program #3"};
+
+
+int show_menu_items_X = 10;
+int show_menu_items_Y = 18;
+int indicator_X = 8;
+int indicator_Y = 16;
+
+int number_page = 0;
 
 
 void FirstScreen()
@@ -35,23 +46,57 @@ void MenuRectangle()
 void ShowMenuItems()
 {
 	for(int i = 0; i < 3; i++)
-	  {
-		  SSD1306_GotoXY(show_menu_items_X, show_menu_items_Y);
-		  SSD1306_Puts(items_menu[i], &Font_7x10, SSD1306_COLOR_WHITE);
-		  show_menu_items_Y += 15;
-	  }
+	{
+		SSD1306_GotoXY(show_menu_items_X, show_menu_items_Y);
+		SSD1306_Puts(items_menu[number_page][i], &Font_7x10, SSD1306_COLOR_WHITE);
+		show_menu_items_Y += 15;
+	}
+
+	show_menu_items_Y = 18;
 }
 
 
-void Indicator()
+void Indicator(bool IsUp)
 {
-//	if(indicator_Y < 8)
-//	{
-//		SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 14, SSD1306_COLOR_WHITE);
-//		continue;
-//	}
+	switch (IsUp)
+			{
+				case true:
+					if(indicator_Y <= 18 && number_page == 0)
+					{
+						break;
+					}
+					else if(indicator_Y <= 18 && number_page != 0)
+					{
+						number_page -= 1;
+						indicator_Y = 46;
+						break;
+					}
+					indicator_Y -= 15;
+					break;
+				case false:
+					if(indicator_Y >= 46 && number_page == 1)
+					{
+						break;
+					}
+					else if(indicator_Y >= 46 && number_page < 2 )
+					{
+						number_page += 1;
+						indicator_Y = 16;
+						break;
+					}
+					indicator_Y += 15;
+					break;
+			}
 
-	SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 14, SSD1306_COLOR_WHITE);
+}
+
+
+void NewFrame()
+{
+	SSD1306_Fill(SSD1306_COLOR_BLACK);
+	MenuRectangle();
+	SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 13, SSD1306_COLOR_WHITE);
+	ShowMenuItems();
 }
 
 
