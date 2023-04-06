@@ -212,7 +212,7 @@ void EXTI2_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(EXTI1_Pin);
   /* USER CODE BEGIN EXTI2_IRQn 1 */
   Indicator(true);
-  NewFrame();
+  NewFrameMenu();
 
   /* USER CODE END EXTI2_IRQn 1 */
 }
@@ -223,9 +223,11 @@ void EXTI2_IRQHandler(void)
 void EXTI3_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI3_IRQn 0 */
-
+//But 2
   /* USER CODE END EXTI3_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
+  SelectParameter(false);
+    ParameterMenu(number_program);
   /* USER CODE BEGIN EXTI3_IRQn 1 */
 
   /* USER CODE END EXTI3_IRQn 1 */
@@ -237,9 +239,11 @@ void EXTI3_IRQHandler(void)
 void EXTI4_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI4_IRQn 0 */
-
+//But 3
   /* USER CODE END EXTI4_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
+  SelectParameter(true);
+  ParameterMenu(number_program);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
 
   /* USER CODE END EXTI4_IRQn 1 */
@@ -256,7 +260,7 @@ void EXTI9_5_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(EXTI4_Pin);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
 	Indicator(false);
-	NewFrame();
+	NewFrameMenu();
   /* USER CODE END EXTI9_5_IRQn 1 */
 }
 
@@ -266,13 +270,17 @@ void EXTI9_5_IRQHandler(void)
 void EXTI15_10_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+	//But 5
 	if(HAL_GPIO_ReadPin(EXTI5_GPIO_Port, EXTI5_Pin))
 	{
+		HAL_GPIO_EXTI_IRQHandler(EXTI5_Pin);
+		ParameterMenu(number_program);
+
 
 	}
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(LED_PIN_Pin);
-  HAL_GPIO_EXTI_IRQHandler(EXTI5_Pin);
+
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
   /* USER CODE END EXTI15_10_IRQn 1 */

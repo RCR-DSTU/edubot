@@ -109,6 +109,7 @@ int main(void)
   SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 13, SSD1306_COLOR_WHITE);
   ShowMenuItems();
 
+  SSD1306_UpdateScreen();
 
 
 
