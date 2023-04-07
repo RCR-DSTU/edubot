@@ -49,6 +49,7 @@
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/SSD1306/Inc"/>
 									<listOptionValue builtIn="false" value="../Drivers/Demo/Inc"/>
+									<listOptionValue builtIn="false" value="../Drivers/Regulator/Inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.707108309" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -129,6 +130,7 @@
 									<listOptionValue builtIn="false" value="/my_car/Core/ssd1306"/>
 									<listOptionValue builtIn="false" value="../Drivers/SSD1306/Inc"/>
 									<listOptionValue builtIn="false" value="/my_car/Drivers/Demo/Inc"/>
+									<listOptionValue builtIn="false" value="../Drivers/Regulator/Inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.374299190" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
