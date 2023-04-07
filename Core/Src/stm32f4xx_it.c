@@ -274,7 +274,38 @@ void EXTI15_10_IRQHandler(void)
 	if(HAL_GPIO_ReadPin(EXTI5_GPIO_Port, EXTI5_Pin))
 	{
 		HAL_GPIO_EXTI_IRQHandler(EXTI5_Pin);
-		ParameterMenu(number_program);
+
+		switch(number_clicks_button5)
+		{
+			case 0:
+				ParameterMenu(number_program);
+				number_clicks_button5 += 1;
+				break;
+			case 1:
+				ScreenExecution(number_program);
+				number_clicks_button5 -= 1;
+				switch(number_program)
+				{
+					case 0:
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+				}
+				break;
+
+		}
+
+
+
+
 
 
 	}

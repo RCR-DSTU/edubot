@@ -99,15 +99,18 @@ int main(void)
   /* USER CODE BEGIN 2 */
   SSD1306_Init();
 
-//  FirstScreen();
-//  SSD1306_UpdateScreen();
-//
-//  HAL_Delay(4000);
-//  SSD1306_Fill(SSD1306_COLOR_BLACK);
+  FirstScreen();
+  SSD1306_UpdateScreen();
+
+  HAL_Delay(4000);
+  SSD1306_Fill(SSD1306_COLOR_BLACK);
 
   MenuRectangle();
   SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 13, SSD1306_COLOR_WHITE);
   ShowMenuItems();
+
+
+  //ScreenExecution(number_program);
 
   SSD1306_UpdateScreen();
 
@@ -123,7 +126,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  SSD1306_UpdateScreen();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
