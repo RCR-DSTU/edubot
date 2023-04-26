@@ -20,10 +20,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
-#include "stdbool.h"
-#include "demo.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "demo.h"
+#include "Regulator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,7 +57,8 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -226,8 +227,6 @@ void EXTI3_IRQHandler(void)
 //But 2
   /* USER CODE END EXTI3_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
-  SelectParameter(false);
-    ParameterMenu(number_program);
   /* USER CODE BEGIN EXTI3_IRQn 1 */
 
   /* USER CODE END EXTI3_IRQn 1 */
@@ -242,8 +241,6 @@ void EXTI4_IRQHandler(void)
 //But 3
   /* USER CODE END EXTI4_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
-  SelectParameter(true);
-  ParameterMenu(number_program);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
 
   /* USER CODE END EXTI4_IRQn 1 */
@@ -262,6 +259,35 @@ void EXTI9_5_IRQHandler(void)
 	Indicator(false);
 	NewFrameMenu();
   /* USER CODE END EXTI9_5_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM4 global interrupt.
+  */
+void TIM4_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM4_IRQn 0 */
+	Enc[0] = TIM2->CNT;
+	Enc[1] = TIM3->CNT;
+
+	wheel_angle[0] = 360.0 * Enc[0] / enc_cnt_per_rot;
+	wheel_w[0] = wheel_angle[0] / 0.1;
+	wheel_v[0] = wheel_w[0] * length / 360.0;
+
+	wheel_angle[1] = 360.0 * Enc[1] / enc_cnt_per_rot;
+	wheel_w[1] = wheel_angle[1] / 0.1;
+	wheel_v[1] = wheel_w[1] * length / 360.0;
+
+	PID_regulator[0].current = - wheel_v[1];
+	PID_regulator[1].current = wheel_v[0];
+
+	TIM2->CNT = 0;
+	TIM3->CNT = 0;
+  /* USER CODE END TIM4_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim4);
+  /* USER CODE BEGIN TIM4_IRQn 1 */
+
+  /* USER CODE END TIM4_IRQn 1 */
 }
 
 /**
@@ -311,10 +337,28 @@ void EXTI15_10_IRQHandler(void)
 	}
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(LED_PIN_Pin);
-
+  HAL_GPIO_EXTI_IRQHandler(EXTI5_Pin);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
   /* USER CODE END EXTI15_10_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM5 global interrupt.
+  */
+void TIM5_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM5_IRQn 0 */
+	PID_regulator[0].target = goal;
+	//PID_regulator[1].target = goal;
+	PID_Calc();
+	SetVoltage_Left(PID_regulator[0].output);
+	//SetVoltage_Right(PID_regulator[1].output);
+  /* USER CODE END TIM5_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim5);
+  /* USER CODE BEGIN TIM5_IRQn 1 */
+
+  /* USER CODE END TIM5_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
