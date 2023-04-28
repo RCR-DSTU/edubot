@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include "ssd1306.h"
 #include "demo.h"
+#include "Regulator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,7 +100,15 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-  /*SSD1306_Init();
+  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_2);
+
+  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_2);
+  /* SSD1306_Init();
 
   FirstScreen();
   SSD1306_UpdateScreen();
@@ -112,12 +121,15 @@ int main(void)
   ShowMenuItems();*/
 
 
+
   //ScreenExecution(number_program);
 
   //SSD1306_UpdateScreen();
 
 
   PID_Init();
+  HAL_TIM_Base_Start_IT(&htim5);
+  HAL_TIM_Base_Start_IT(&htim4);
 
 
 

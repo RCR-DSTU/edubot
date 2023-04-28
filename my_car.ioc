@@ -352,4 +352,4 @@ VP_TIM4_VS_ClockSourceITR.Signal=TIM4_VS_ClockSourceITR
 VP_TIM5_VS_ClockSourceITR.Mode=TriggerSource_ITR0
 VP_TIM5_VS_ClockSourceITR.Signal=TIM5_VS_ClockSourceITR
 board=custom
-isbadioc=true
+isbadioc=false

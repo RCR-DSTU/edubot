@@ -3,6 +3,7 @@
 #define wheel_r  0.02
 #define length  0.1256628
 #define enc_cnt_per_rot  3200.0
+#define step	0.1125
 
 #include "main.h"
 #include "i2c.h"
@@ -33,9 +34,12 @@ float target;
 float error;
 float prev_error;
 float sum_error;
+float pid_error_end;
+char pid_finish;
 }PID;
 
 extern PID PID_regulator[2];
+extern PID Line_regulator;
 
 extern void SetVoltage_Left(float Duty);
 

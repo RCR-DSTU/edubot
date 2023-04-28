@@ -264,22 +264,29 @@ void EXTI9_5_IRQHandler(void)
 /**
   * @brief This function handles TIM4 global interrupt.
   */
+float dist[2];
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
 	Enc[0] = TIM2->CNT;
 	Enc[1] = TIM3->CNT;
 
-	wheel_angle[0] = 360.0 * Enc[0] / enc_cnt_per_rot;
-	wheel_w[0] = wheel_angle[0] / 0.1;
-	wheel_v[0] = wheel_w[0] * length / 360.0;
+	wheel_angle[0] = Enc[0] * step; // angle distanse
+	wheel_w[0] = wheel_angle[0] * length / 360.0;
+	wheel_v[0] = wheel_w[0] / 0.01;
 
-	wheel_angle[1] = 360.0 * Enc[1] / enc_cnt_per_rot;
-	wheel_w[1] = wheel_angle[1] / 0.1;
-	wheel_v[1] = wheel_w[1] * length / 360.0;
+	dist[0] += wheel_w[0];
 
-	PID_regulator[0].current = - wheel_v[1];
-	PID_regulator[1].current = wheel_v[0];
+	wheel_angle[1] = Enc[1] * step; // angle distanse
+	wheel_w[1] = wheel_angle[1] * length / 360.0;
+	wheel_v[1] = wheel_w[1] / 0.01;
+
+	dist[1] += wheel_w[1];
+
+	PID_regulator[0].current = -wheel_v[0];
+	PID_regulator[1].current = wheel_v[1];
+
+	Line_regulator.current = (dist[0] + dist[1]) / 2;
 
 	TIM2->CNT = 0;
 	TIM3->CNT = 0;
@@ -349,11 +356,25 @@ void EXTI15_10_IRQHandler(void)
 void TIM5_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
-	PID_regulator[0].target = goal;
+	if(Line_regulator.pid_finish)
+	{
+		PID_regulator[0].target = 0.0;
+		PID_regulator[1].target = 0.0;
+		Line_regulator.target = 0.0;
+	} else
+	{
+		PID_Calc();
+		PID_regulator[0].target = Line_regulator.output;
+		PID_regulator[1].target = Line_regulator.output;
+	}
+
+
+
 	//PID_regulator[1].target = goal;
-	PID_Calc();
+
+
 	SetVoltage_Left(PID_regulator[0].output);
-	//SetVoltage_Right(PID_regulator[1].output);
+	SetVoltage_Right(PID_regulator[1].output);
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
   /* USER CODE BEGIN TIM5_IRQn 1 */
