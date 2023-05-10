@@ -100,15 +100,9 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
 
-  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
-  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_2);
 
-  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);
-  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_2);
-  /* SSD1306_Init();
+  SSD1306_Init();
 
   FirstScreen();
   SSD1306_UpdateScreen();
@@ -118,13 +112,9 @@ int main(void)
 
   MenuRectangle();
   SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 13, SSD1306_COLOR_WHITE);
-  ShowMenuItems();*/
+  ShowMenuItems();
 
-
-
-  //ScreenExecution(number_program);
-
-  //SSD1306_UpdateScreen();
+  SSD1306_UpdateScreen();
 
 
   PID_Init();

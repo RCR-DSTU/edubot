@@ -197,7 +197,7 @@ void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 419;
+  htim4.Init.Prescaler = 839;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 1000;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

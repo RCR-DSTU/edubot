@@ -6,7 +6,7 @@ char* items_menu[2][3] = {
 					{"Program #4", "Program #5", "Program #6"}
 						 };
 
-char* names_parameters[] = {"name1", "name2", "name3", "name4", "name5", "name6"};
+char* names_parameters[] = {"distn", "name2", "name3", "name4", "name5", "name6"};
 //char* names_program[] = {"Task1", "Task2", "Task3", "Task4", "Task5", "Task6"};
 
 
@@ -23,7 +23,7 @@ uint8_t number_page = 0;
 uint8_t number_program = 0;
 uint8_t number_clicks_button5 = 0;
 
-int parameter_value = 1;
+int parameter_value = 0;
 char str[3];
 
 

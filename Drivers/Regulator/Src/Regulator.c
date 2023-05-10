@@ -73,13 +73,13 @@ PID_regulator[1].Max_sum_error = 5.0;
 PID_regulator[1].prev_error = 0.0;
 PID_regulator[1].sum_error = 0.0;
 
-Line_regulator.K_p = 1.0;
-Line_regulator.I_p = 0.00;
+Line_regulator.K_p = 0.15;
+Line_regulator.I_p = 0.1;
 Line_regulator.D_p = 0.0;
 Line_regulator.current = 0.0;
-Line_regulator.target = input_distance;
+Line_regulator.target = parameter_value;
 Line_regulator.error = 0.0;
-Line_regulator.Max_output = 0.08;
+Line_regulator.Max_output = 0.03;
 Line_regulator.Min_output = 0.02;
 Line_regulator.Max_sum_error = 2.0;
 Line_regulator.prev_error = 0.0;
@@ -118,8 +118,8 @@ if(Line_regulator.sum_error > Line_regulator.Max_sum_error) Line_regulator.sum_e
 if(Line_regulator.sum_error < -Line_regulator.Max_sum_error) Line_regulator.sum_error = -Line_regulator.Max_sum_error;
 
 Line_regulator.output = (Line_regulator.K_p * Line_regulator.error) + (Line_regulator.I_p * Line_regulator.sum_error) + (Line_regulator.D_p * Line_regulator.prev_error);
-if(Line_regulator.output < -Line_regulator.Max_output) Line_regulator.output = -1.0;
-if(Line_regulator.output > Line_regulator.Max_output) Line_regulator.output = 1.0;
+if(Line_regulator.output < -Line_regulator.Max_output) Line_regulator.output = Line_regulator.Min_output;
+if(Line_regulator.output > Line_regulator.Max_output) Line_regulator.output = Line_regulator.Max_output;
 Line_regulator.prev_error = Line_regulator.error;
 if(Line_regulator.error <= Line_regulator.pid_error_end &&
    Line_regulator.error >= -Line_regulator.pid_error_end) Line_regulator.pid_finish = 1;

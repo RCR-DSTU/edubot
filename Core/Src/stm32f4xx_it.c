@@ -43,7 +43,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+float dist[2];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -226,7 +226,9 @@ void EXTI3_IRQHandler(void)
   /* USER CODE BEGIN EXTI3_IRQn 0 */
 //But 2
   /* USER CODE END EXTI3_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
+	HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
+	SelectParameter(false);
+	ParameterMenu(number_program);
   /* USER CODE BEGIN EXTI3_IRQn 1 */
 
   /* USER CODE END EXTI3_IRQn 1 */
@@ -240,7 +242,9 @@ void EXTI4_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_IRQn 0 */
 //But 3
   /* USER CODE END EXTI4_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
+	HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
+	SelectParameter(true);
+	ParameterMenu(number_program);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
 
   /* USER CODE END EXTI4_IRQn 1 */
@@ -264,29 +268,26 @@ void EXTI9_5_IRQHandler(void)
 /**
   * @brief This function handles TIM4 global interrupt.
   */
-float dist[2];
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
 	Enc[0] = TIM2->CNT;
 	Enc[1] = TIM3->CNT;
 
-	wheel_angle[0] = Enc[0] * step; // angle distanse
-	wheel_w[0] = wheel_angle[0] * length / 360.0;
-	wheel_v[0] = wheel_w[0] / 0.01;
+	wheel_angle[0] = Enc[0] * disk_to_real; // angle distanse
+	wheel_v[0] = wheel_angle[0] / 0.01;
 
-	dist[0] += wheel_w[0];
+	dist[0] += wheel_angle[0];
 
-	wheel_angle[1] = Enc[1] * step; // angle distanse
-	wheel_w[1] = wheel_angle[1] * length / 360.0;
-	wheel_v[1] = wheel_w[1] / 0.01;
+	wheel_angle[1] = Enc[1] * disk_to_real; // angle distanse
+	wheel_v[1] = wheel_angle[1] / 0.01;
 
-	dist[1] += wheel_w[1];
+	dist[1] += wheel_angle[1];
 
 	PID_regulator[0].current = -wheel_v[0];
 	PID_regulator[1].current = wheel_v[1];
 
-	Line_regulator.current = (dist[0] + dist[1]) / 2;
+	Line_regulator.current = (-dist[0] + dist[1]) / 2;
 
 	TIM2->CNT = 0;
 	TIM3->CNT = 0;
@@ -320,6 +321,17 @@ void EXTI15_10_IRQHandler(void)
 				switch(number_program)
 				{
 					case 0:
+						HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+						HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+
+						HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
+						HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_2);
+
+						HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);
+						HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_2);
+						PID_Init();
+						HAL_TIM_Base_Start_IT(&htim5);
+						HAL_TIM_Base_Start_IT(&htim4);
 						break;
 					case 1:
 						break;
@@ -361,11 +373,16 @@ void TIM5_IRQHandler(void)
 		PID_regulator[0].target = 0.0;
 		PID_regulator[1].target = 0.0;
 		Line_regulator.target = 0.0;
+		Line_regulator.sum_error = 0.0;
+		SetVoltage_Left(0.0);
+		SetVoltage_Right(0.0);
 	} else
 	{
 		PID_Calc();
 		PID_regulator[0].target = Line_regulator.output;
 		PID_regulator[1].target = Line_regulator.output;
+		SetVoltage_Left(PID_regulator[0].output);
+		SetVoltage_Right(PID_regulator[1].output);
 	}
 
 
@@ -373,8 +390,6 @@ void TIM5_IRQHandler(void)
 	//PID_regulator[1].target = goal;
 
 
-	SetVoltage_Left(PID_regulator[0].output);
-	SetVoltage_Right(PID_regulator[1].output);
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
   /* USER CODE BEGIN TIM5_IRQn 1 */
