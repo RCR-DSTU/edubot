@@ -23,8 +23,8 @@ uint8_t number_page = 0;
 uint8_t number_program = 0;
 uint8_t number_clicks_button5 = 0;
 
-int parameter_value = 0;
-char str[3];
+float parameter_value = 0.0;
+char str[4];
 
 
 
@@ -126,8 +126,8 @@ void ParameterMenu(uint8_t value)
 	SSD1306_Puts("Select ", &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_GotoXY(71, 20);
 	SSD1306_Puts(names_parameters[value], &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_GotoXY(63, 34);
-	sprintf(str, "%d", parameter_value);
+	SSD1306_GotoXY(56, 34);
+	sprintf(str, "%.1f", parameter_value);
 	SSD1306_Puts(str, &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_UpdateScreen();
 }
@@ -138,12 +138,12 @@ void SelectParameter(bool IsUp)
 	switch(IsUp)
 	{
 		case true:
-			parameter_value += 1;
+			parameter_value += 0.1;
 			break;
 		case false:
-			 if(parameter_value != 1)
+			 if(parameter_value != 0.0)
 			 {
-				 parameter_value -= 1;
+				 parameter_value -= 0.1;
 				 break;
 			 }
 			break;

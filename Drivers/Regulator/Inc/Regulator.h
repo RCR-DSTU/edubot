@@ -2,7 +2,7 @@
 
 #define wheel_r  0.022
 #define length  0.1256628
-#define enc_cnt_per_rot  1580.0
+#define enc_cnt_per_rot  1600.0
 #define disk_to_real	((2*3.14157*wheel_r) / enc_cnt_per_rot)
 
 #include "main.h"

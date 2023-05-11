@@ -10,7 +10,7 @@ extern uint8_t number_program;
 
 extern uint8_t number_clicks_button5;
 
-extern int parameter_value;
+extern float parameter_value;
 
 
 void FirstScreen();
