@@ -29,6 +29,7 @@
 #include "ssd1306.h"
 #include "demo.h"
 #include "Regulator.h"
+#include "Programs.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,6 +102,8 @@ int main(void)
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
+  Robot_Init();
+  robot.demo.constructor = &ConstrctionProgram;
 
   SSD1306_Init();
 
@@ -118,8 +121,8 @@ int main(void)
 
 
 //  PID_Init();
-//  HAL_TIM_Base_Start_IT(&htim5);
-//  HAL_TIM_Base_Start_IT(&htim4);
+HAL_TIM_Base_Start_IT(&htim5);
+HAL_TIM_Base_Start_IT(&htim4);
 
 
 

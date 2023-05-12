@@ -228,7 +228,7 @@ void EXTI3_IRQHandler(void)
   /* USER CODE END EXTI3_IRQn 0 */
 	HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
 	SelectParameter(false);
-	ParameterMenu(number_program);
+	ParameterMenu(robot.currentProg);
   /* USER CODE BEGIN EXTI3_IRQn 1 */
 
   /* USER CODE END EXTI3_IRQn 1 */
@@ -244,7 +244,7 @@ void EXTI4_IRQHandler(void)
   /* USER CODE END EXTI4_IRQn 0 */
 	HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
 	SelectParameter(true);
-	ParameterMenu(number_program);
+	ParameterMenu(robot.currentProg);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
 
   /* USER CODE END EXTI4_IRQn 1 */
@@ -309,41 +309,17 @@ void EXTI15_10_IRQHandler(void)
 	{
 		HAL_GPIO_EXTI_IRQHandler(EXTI5_Pin);
 
-		switch(number_clicks_button5)
+		switch(robot.number_clicks_button5)
 		{
 			case 0:
-				ParameterMenu(number_program);
-				number_clicks_button5 += 1;
+				ParameterMenu(robot.currentProg);
+				robot.number_clicks_button5 += 1;
 				break;
 			case 1:
-				ScreenExecution(number_program);
-				number_clicks_button5 -= 1;
-				switch(number_program)
-				{
-					case 0:
-						HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-						HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+				ScreenExecution(robot.currentProg);
+				robot.number_clicks_button5 -= 1;
+				robot.demo.constructor();
 
-						HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
-						HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_2);
-
-						HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);
-						HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_2);
-						PID_Init();
-						HAL_TIM_Base_Start_IT(&htim5);
-						HAL_TIM_Base_Start_IT(&htim4);
-						break;
-					case 1:
-						break;
-					case 2:
-						break;
-					case 3:
-						break;
-					case 4:
-						break;
-					case 5:
-						break;
-				}
 				break;
 
 		}
@@ -368,24 +344,9 @@ void EXTI15_10_IRQHandler(void)
 void TIM5_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
-	if(Line_regulator.pid_finish)
-	{
-		PID_regulator[0].target = 0.0;
-		PID_regulator[1].target = 0.0;
-		Line_regulator.target = 0.0;
-		Line_regulator.sum_error = 0.0;
-		SetVoltage_Left(0.0);
-		SetVoltage_Right(0.0);
-	} else
-	{
-		PID_Calc();
-		PID_regulator[0].target = Line_regulator.output;
-		PID_regulator[1].target = Line_regulator.output;
-		SetVoltage_Left(PID_regulator[0].output);
-		SetVoltage_Right(PID_regulator[1].output);
+	if(robot.isStart){
+		robot.demo.runner();
 	}
-
-
 
 	//PID_regulator[1].target = goal;
 

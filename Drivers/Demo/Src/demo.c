@@ -19,12 +19,9 @@ uint8_t indicator_Y = 16;
 const uint8_t progress_bar_X = 14;
 uint8_t progress_bar_Y = 43;
 
-uint8_t number_page = 0;
-uint8_t number_program = 0;
-uint8_t number_clicks_button5 = 0;
-
-float parameter_value = 0.0;
 char str[4];
+
+
 
 
 
@@ -56,7 +53,7 @@ void ShowMenuItems()
 	for(int i = 0; i < 3; i++)
 	{
 		SSD1306_GotoXY(show_menu_items_X, show_menu_items_Y);
-		SSD1306_Puts(items_menu[number_page][i], &Font_7x10, SSD1306_COLOR_WHITE);
+		SSD1306_Puts(items_menu[robot.currentPage][i], &Font_7x10, SSD1306_COLOR_WHITE);
 		show_menu_items_Y += 15;
 	}
 
@@ -70,35 +67,35 @@ void Indicator(bool IsUp)
 	switch (IsUp)
 			{
 				case true:
-					if(indicator_Y <= 18 && number_page == 0)
+					if(indicator_Y <= 18 && robot.currentPage == 0)
 					{
 						break;
 					}
-					else if(indicator_Y <= 18 && number_page != 0)
+					else if(indicator_Y <= 18 && robot.currentPage != 0)
 					{
-						number_page -= 1;
+						robot.currentPage -= 1;
 						indicator_Y = 46;
-						number_program -= 1;
+						robot.currentProg -= 1;
 						break;
 					}
 					indicator_Y -= 15;
-					number_program -= 1;
+					robot.currentProg -= 1;
 
 					break;
 				case false:
-					if(indicator_Y >= 46 && number_page == 1)
+					if(indicator_Y >= 46 && robot.currentPage == 1)
 					{
 						break;
 					}
-					else if(indicator_Y >= 46 && number_page < 2 )
+					else if(indicator_Y >= 46 && robot.currentPage < 2 )
 					{
-						number_page += 1;
+						robot.currentPage += 1;
 						indicator_Y = 16;
-						number_program += 1;
+						robot.currentProg += 1;
 						break;
 					}
 					indicator_Y += 15;
-					number_program += 1;
+					robot.currentProg += 1;
 					break;
 			}
 
@@ -127,7 +124,8 @@ void ParameterMenu(uint8_t value)
 	SSD1306_GotoXY(71, 20);
 	SSD1306_Puts(names_parameters[value], &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_GotoXY(56, 34);
-	sprintf(str, "%.1f", parameter_value);
+	sprintf(str, "%.1f", robot.input_arg);
+
 	SSD1306_Puts(str, &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_UpdateScreen();
 }
@@ -138,12 +136,12 @@ void SelectParameter(bool IsUp)
 	switch(IsUp)
 	{
 		case true:
-			parameter_value += 0.1;
+			robot.input_arg += 0.1;
 			break;
 		case false:
-			 if(parameter_value != 0.0)
+			 if(robot.input_arg != 0.0)
 			 {
-				 parameter_value -= 0.1;
+				 robot.input_arg -= 0.1;
 				 break;
 			 }
 			break;

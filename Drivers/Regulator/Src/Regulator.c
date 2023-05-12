@@ -8,7 +8,6 @@ PID PID_regulator[2];
 PID Line_regulator;
 
 float goal = 0.04;
-float input_distance = 0;
 
 
 void SetVoltage_Left(float Duty)
@@ -77,7 +76,7 @@ Line_regulator.K_p = 0.15;
 Line_regulator.I_p = 0.1;
 Line_regulator.D_p = 0.0;
 Line_regulator.current = 0.0;
-Line_regulator.target = parameter_value;
+Line_regulator.target = robot.input_arg;
 Line_regulator.error = 0.0;
 Line_regulator.Max_output = 0.04;
 Line_regulator.Min_output = 0.02;
