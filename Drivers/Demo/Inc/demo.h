@@ -26,5 +26,7 @@ void ScreenExecution(uint8_t value);
 
 void ProgressBar(float progress);
 
+void FloatToChar(float number, char* string);
+
 
 

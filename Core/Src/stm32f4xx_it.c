@@ -226,11 +226,11 @@ void EXTI3_IRQHandler(void)
   /* USER CODE BEGIN EXTI3_IRQn 0 */
 //But 2
   /* USER CODE END EXTI3_IRQn 0 */
-	HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
-	SelectParameter(false);
-	ParameterMenu(robot.currentProg);
+  HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
   /* USER CODE BEGIN EXTI3_IRQn 1 */
-
+  HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
+  SelectParameter(false);
+  ParameterMenu(robot.currentProg);
   /* USER CODE END EXTI3_IRQn 1 */
 }
 
@@ -242,10 +242,11 @@ void EXTI4_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_IRQn 0 */
 //But 3
   /* USER CODE END EXTI4_IRQn 0 */
-	HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
-	SelectParameter(true);
-	ParameterMenu(robot.currentProg);
+  HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
+  HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
+  SelectParameter(true);
+  ParameterMenu(robot.currentProg);
 
   /* USER CODE END EXTI4_IRQn 1 */
 }
@@ -271,26 +272,17 @@ void EXTI9_5_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
-	Enc[0] = TIM2->CNT;
-	Enc[1] = TIM3->CNT;
+	if(robot.demo.current_ticks >= robot.demo.critical_ticks)
+	{
+		SSD1306_Fill(SSD1306_COLOR_BLACK);
+		SSD1306_UpdateScreen();
+		ScreenExecution(robot.currentProg);
+		robot.demo.current_ticks = 0;
 
-	wheel_angle[0] = Enc[0] * disk_to_real; // angle distanse
-	wheel_v[0] = wheel_angle[0] / 0.01;
-
-	dist[0] += wheel_angle[0];
-
-	wheel_angle[1] = Enc[1] * disk_to_real; // angle distanse
-	wheel_v[1] = wheel_angle[1] / 0.01;
-
-	dist[1] += wheel_angle[1];
-
-	PID_regulator[0].current = -wheel_v[0];
-	PID_regulator[1].current = wheel_v[1];
-
-	Line_regulator.current = (-dist[0] + dist[1]) / 2;
-
-	TIM2->CNT = 0;
-	TIM3->CNT = 0;
+	} else
+	{
+		robot.demo.current_ticks++;
+	}
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
@@ -319,9 +311,7 @@ void EXTI15_10_IRQHandler(void)
 				ScreenExecution(robot.currentProg);
 				robot.number_clicks_button5 -= 1;
 				robot.demo.constructor();
-
 				break;
-
 		}
 
 
@@ -344,9 +334,34 @@ void EXTI15_10_IRQHandler(void)
 void TIM5_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
+	Enc[0] = TIM2->CNT;
+	Enc[1] = TIM3->CNT;
+
+	wheel_angle[0] = Enc[0] * disk_to_real; // angle distanse
+	wheel_v[0] = wheel_angle[0] / 0.01;
+
+	dist[0] += wheel_angle[0];
+
+	wheel_angle[1] = Enc[1] * disk_to_real; // angle distanse
+	wheel_v[1] = wheel_angle[1] / 0.01;
+
+	dist[1] += wheel_angle[1];
+
+	PID_regulator[0].current = -wheel_v[0];
+	PID_regulator[1].current = wheel_v[1];
+
+	Line_regulator.current = (-dist[0] + dist[1]) / 2;
+
+	TIM2->CNT = 0;
+	TIM3->CNT = 0;
+
 	if(robot.isStart){
 		robot.demo.runner();
 	}
+	else{
+		robot.demo.destructor();
+	}
+
 
 	//PID_regulator[1].target = goal;
 

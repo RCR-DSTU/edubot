@@ -102,8 +102,12 @@ int main(void)
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
+
+
+
   Robot_Init();
   robot.demo.constructor = &ConstrctionProgram;
+  robot.demo.destructor = &DestrctionProgram;
 
   SSD1306_Init();
 
@@ -121,8 +125,6 @@ int main(void)
 
 
 //  PID_Init();
-HAL_TIM_Base_Start_IT(&htim5);
-HAL_TIM_Base_Start_IT(&htim4);
 
 
 

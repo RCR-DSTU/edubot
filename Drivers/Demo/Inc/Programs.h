@@ -7,6 +7,8 @@ typedef struct{
 	void (*constructor)(void);
 	void (*destructor)(void);
 	void (*runner)(void);
+	uint8_t current_ticks;
+	uint8_t critical_ticks;
 }Program;
 
 typedef struct{

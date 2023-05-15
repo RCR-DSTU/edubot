@@ -20,6 +20,8 @@ const uint8_t progress_bar_X = 14;
 uint8_t progress_bar_Y = 43;
 
 char str[4];
+char speed_str[5];
+char dist_str[5];
 
 
 
@@ -161,12 +163,19 @@ void ScreenExecution(uint8_t value)
 //	SSD1306_Puts(names_program[value], &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_GotoXY(10, 18);
 	SSD1306_Puts("Speed:", &Font_7x10, SSD1306_COLOR_WHITE);
+	SSD1306_GotoXY(54, 18);
+	//sprintf(speed_str, "%.2f", robot.speed);
+	FloatToChar(robot.speed, speed_str);
+	SSD1306_Puts(speed_str, &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_GotoXY(10, 30);
 	SSD1306_Puts("Distance:", &Font_7x10, SSD1306_COLOR_WHITE);
+	SSD1306_GotoXY(75, 30);
+	//sprintf(dist_str, "%.1f", robot.distance);
+	FloatToChar(robot.distanse, dist_str);
+	SSD1306_Puts(dist_str, &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_UpdateScreen();
 	ProgressBar(0.5);
 	SSD1306_UpdateScreen();
-
 }
 
 
@@ -178,6 +187,28 @@ void ProgressBar(float progress)
 		SSD1306_DrawFilledRectangle(progress_bar_X, progress_bar_Y, pixels, 12, SSD1306_COLOR_WHITE);
 		SSD1306_UpdateScreen();
 
+}
+
+
+void FloatToChar(float number, char* string)
+{
+	if(number >= 0){
+		string[0] = ' ';
+
+	}
+	else{
+		string[0] = '-';
+		number *= -1;
+	}
+	uint8_t firstNumber = (int)(number);
+	uint8_t frac_part = (int)((number - firstNumber) * 100);
+	uint8_t secondNumber = (int)(frac_part / 10);
+	uint8_t thirdNumber = (int)(frac_part % 10);
+
+	string[1] = (char)(firstNumber + 48);
+	string[2] = '.';
+	string[3] = (char)(secondNumber + 48);
+	string[4] = (char)(thirdNumber + 48);
 
 }
 
