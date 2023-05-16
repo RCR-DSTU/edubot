@@ -9,6 +9,8 @@ char* items_menu[2][3] = {
 char* names_parameters[] = {"distn", "name2", "name3", "name4", "name5", "name6"};
 //char* names_program[] = {"Task1", "Task2", "Task3", "Task4", "Task5", "Task6"};
 
+static const char digits[] = "0123456789";
+
 
 const uint8_t show_menu_items_X = 10;
 uint8_t show_menu_items_Y = 18;
@@ -174,18 +176,18 @@ void ScreenExecution(uint8_t value)
 	FloatToChar(robot.distanse, dist_str);
 	SSD1306_Puts(dist_str, &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_UpdateScreen();
-	ProgressBar(0.5);
+	ProgressBar(robot.progress);
 	SSD1306_UpdateScreen();
 }
 
 
 void ProgressBar(float progress)
 {
-	if(progress < 0.0 || progress > 1.00 ) return;
+	if(progress <= 0.0 || progress >= 1.00 ) return;
 
-	uint16_t pixels = 100 * progress;
-		SSD1306_DrawFilledRectangle(progress_bar_X, progress_bar_Y, pixels, 12, SSD1306_COLOR_WHITE);
-		SSD1306_UpdateScreen();
+	uint8_t pixels = 100 * progress;
+	SSD1306_DrawFilledRectangle(progress_bar_X, progress_bar_Y, pixels, 12, SSD1306_COLOR_WHITE);
+
 
 }
 
@@ -198,18 +200,17 @@ void FloatToChar(float number, char* string)
 	}
 	else{
 		string[0] = '-';
-		number *= -1;
+		number = -number;
 	}
 	uint8_t firstNumber = (int)(number);
 	uint8_t frac_part = (int)((number - firstNumber) * 100);
 	uint8_t secondNumber = (int)(frac_part / 10);
 	uint8_t thirdNumber = (int)(frac_part % 10);
 
-	string[1] = (char)(firstNumber + 48);
+	string[1] = digits[firstNumber];
 	string[2] = '.';
-	string[3] = (char)(secondNumber + 48);
-	string[4] = (char)(thirdNumber + 48);
-
+	string[3] = digits[secondNumber];
+	string[4] = digits[thirdNumber];
 }
 
 

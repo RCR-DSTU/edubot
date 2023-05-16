@@ -351,6 +351,11 @@ void TIM5_IRQHandler(void)
 	PID_regulator[1].current = wheel_v[1];
 
 	Line_regulator.current = (-dist[0] + dist[1]) / 2;
+	robot.distanse = Line_regulator.current;
+
+	robot.speed = (-wheel_v[0] + wheel_v[1]) / 2;
+
+	robot.progress = (Line_regulator.current * 100) / Line_regulator.target;
 
 	TIM2->CNT = 0;
 	TIM3->CNT = 0;

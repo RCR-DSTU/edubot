@@ -20,6 +20,7 @@ typedef struct{
 	float input_arg;
 	float speed;
 	float distanse;
+	float progress;
 	Program demo;
 }EduBot;
 

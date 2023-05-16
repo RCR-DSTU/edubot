@@ -33,14 +33,13 @@ void ConstrctionProgram(void) {
 			HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1);
 			HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_2);
 
-			robot.distanse = Line_regulator.current;
 			robot.isStart = true;
 
 			HAL_TIM_Base_Start_IT(&htim4);
 			HAL_TIM_Base_Start_IT(&htim5);
 
 			robot.demo.runner = &RunnerProgram1;
-			robot.demo.critical_ticks = 100;
+			robot.demo.critical_ticks = 50;
 			break;
 		case 2:
 			break;
