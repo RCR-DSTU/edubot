@@ -1,11 +1,10 @@
 #include "Programs.h"
 
+
+
 EduBot robot;
 Program demo;
 
-
-
-//robot.demo.constructor();
 
 void Robot_Init(void){
 	robot.currentProg = 0;
@@ -13,8 +12,8 @@ void Robot_Init(void){
 	robot.number_clicks_button5 = 0;
 	robot.input_arg = 0.0;
 	robot.isStart = false;
+	robot.currentCycle = 0;
 }
-
 
 
 void ConstrctionProgram(void) {
@@ -35,11 +34,11 @@ void ConstrctionProgram(void) {
 
 			robot.isStart = true;
 
-			HAL_TIM_Base_Start_IT(&htim4);
 			HAL_TIM_Base_Start_IT(&htim5);
 
 			robot.demo.runner = &RunnerProgram1;
-			robot.demo.critical_ticks = 50;
+			ScreenExecution();
+			SSD1306_UpdateScreen();
 			break;
 		case 2:
 			break;
@@ -111,6 +110,41 @@ void RunnerProgram1(void){
 		PID_regulator[1].target = Line_regulator.output;
 		SetVoltage_Left(PID_regulator[0].output);
 		SetVoltage_Right(PID_regulator[1].output);
+
+	}
+
+	switch(robot.currentCycle)
+	{
+		case 0:
+			ProgressBar(robot.progress);
+			robot.currentCycle++;
+			break;
+		case 1:
+			FloatToChar(robot.speed, speed_str);
+			robot.currentCycle++;
+			break;
+		case 2:
+			FloatToChar(robot.distanse, dist_str);
+			robot.currentCycle++;
+			break;
+		case 3:
+			SSD1306_GotoXY(10, 30);
+			SSD1306_Puts("Distance:", &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_GotoXY(75, 30);
+			FloatToChar(robot.distanse, dist_str);
+			SSD1306_Puts(dist_str, &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_UpdateScreen();
+			robot.currentCycle++;
+			break;
+		case 4:
+			SSD1306_GotoXY(10, 18);
+			SSD1306_Puts("Speed:", &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_GotoXY(54, 18);
+			FloatToChar(robot.speed, speed_str);
+			SSD1306_Puts(speed_str, &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_UpdateScreen();
+			robot.currentCycle = 0;
+			break;
 
 	}
 

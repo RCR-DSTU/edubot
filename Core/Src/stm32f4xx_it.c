@@ -272,17 +272,8 @@ void EXTI9_5_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
-	if(robot.demo.current_ticks >= robot.demo.critical_ticks)
-	{
-		SSD1306_Fill(SSD1306_COLOR_BLACK);
-		SSD1306_UpdateScreen();
-		ScreenExecution(robot.currentProg);
-		robot.demo.current_ticks = 0;
 
-	} else
-	{
-		robot.demo.current_ticks++;
-	}
+
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
@@ -308,16 +299,10 @@ void EXTI15_10_IRQHandler(void)
 				robot.number_clicks_button5 += 1;
 				break;
 			case 1:
-				ScreenExecution(robot.currentProg);
 				robot.number_clicks_button5 -= 1;
 				robot.demo.constructor();
 				break;
 		}
-
-
-
-
-
 
 	}
   /* USER CODE END EXTI15_10_IRQn 0 */
@@ -351,11 +336,12 @@ void TIM5_IRQHandler(void)
 	PID_regulator[1].current = wheel_v[1];
 
 	Line_regulator.current = (-dist[0] + dist[1]) / 2;
-	robot.distanse = Line_regulator.current;
 
-	robot.speed = (-wheel_v[0] + wheel_v[1]) / 2;
+	robot.distanse = Line_regulator.current; // Distance to screen
 
-	robot.progress = (Line_regulator.current * 100) / Line_regulator.target;
+	robot.speed = (-wheel_v[0] + wheel_v[1]) / 2; // Speed to screen
+
+	robot.progress = Line_regulator.current / Line_regulator.target; // Progress bar
 
 	TIM2->CNT = 0;
 	TIM3->CNT = 0;

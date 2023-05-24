@@ -7,7 +7,6 @@ char* items_menu[2][3] = {
 						 };
 
 char* names_parameters[] = {"distn", "name2", "name3", "name4", "name5", "name6"};
-//char* names_program[] = {"Task1", "Task2", "Task3", "Task4", "Task5", "Task6"};
 
 static const char digits[] = "0123456789";
 
@@ -39,7 +38,6 @@ void FirstScreen()
 	SSD1306_Puts("DSTU", &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_Image(logo_RCR_40x40, 40, 40, 10, 16);
 	SSD1306_Image(logo_DSTU_40x40, 40, 40, 80, 16);
-
 }
 
 
@@ -129,7 +127,6 @@ void ParameterMenu(uint8_t value)
 	SSD1306_Puts(names_parameters[value], &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_GotoXY(56, 34);
 	sprintf(str, "%.1f", robot.input_arg);
-
 	SSD1306_Puts(str, &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_UpdateScreen();
 }
@@ -153,7 +150,7 @@ void SelectParameter(bool IsUp)
 }
 
 
-void ScreenExecution(uint8_t value)
+void ScreenExecution(void)
 {
 	SSD1306_Fill(SSD1306_COLOR_BLACK);
 	SSD1306_DrawRectangle(3, 3, 122, 58, SSD1306_COLOR_WHITE);
@@ -161,23 +158,6 @@ void ScreenExecution(uint8_t value)
 	SSD1306_GotoXY(36, 4);
 	SSD1306_Puts("Progress", &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_DrawRectangle(14, 43, 100, 12, SSD1306_COLOR_WHITE);
-//	SSD1306_GotoXY(48, 44);
-//	SSD1306_Puts(names_program[value], &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_GotoXY(10, 18);
-	SSD1306_Puts("Speed:", &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_GotoXY(54, 18);
-	//sprintf(speed_str, "%.2f", robot.speed);
-	FloatToChar(robot.speed, speed_str);
-	SSD1306_Puts(speed_str, &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_GotoXY(10, 30);
-	SSD1306_Puts("Distance:", &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_GotoXY(75, 30);
-	//sprintf(dist_str, "%.1f", robot.distance);
-	FloatToChar(robot.distanse, dist_str);
-	SSD1306_Puts(dist_str, &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_UpdateScreen();
-	ProgressBar(robot.progress);
-	SSD1306_UpdateScreen();
 }
 
 
@@ -187,7 +167,7 @@ void ProgressBar(float progress)
 
 	uint8_t pixels = 100 * progress;
 	SSD1306_DrawFilledRectangle(progress_bar_X, progress_bar_Y, pixels, 12, SSD1306_COLOR_WHITE);
-
+	SSD1306_UpdateScreen();
 
 }
 

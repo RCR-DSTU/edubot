@@ -8,6 +8,9 @@
 extern const uint8_t indicator_X;
 extern uint8_t indicator_Y;
 
+extern char speed_str[5];
+extern char dist_str[5];
+
 void FirstScreen();
 
 void MenuRectangle();
@@ -22,7 +25,7 @@ void ParameterMenu(uint8_t value);
 
 void SelectParameter(bool IsUp);
 
-void ScreenExecution(uint8_t value);
+void ScreenExecution(void);
 
 void ProgressBar(float progress);
 

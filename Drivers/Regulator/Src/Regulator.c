@@ -52,7 +52,7 @@ PID_regulator[0].K_p = 1.0;
 PID_regulator[0].I_p = 0.35;
 PID_regulator[0].D_p = 0.25;
 PID_regulator[0].current = 0.0;
-PID_regulator[0].target = 0.2;
+PID_regulator[0].target = 0.0;
 PID_regulator[0].error = 0.0;
 PID_regulator[0].Max_output = 1.0;
 PID_regulator[0].Min_output = 0.01;
@@ -64,7 +64,7 @@ PID_regulator[1].K_p = 1.0;
 PID_regulator[1].I_p = 0.35;
 PID_regulator[1].D_p = 0.2;
 PID_regulator[1].current = 0.0;
-PID_regulator[1].target = 0.2;
+PID_regulator[1].target = 0.0;
 PID_regulator[1].error = 0.0;
 PID_regulator[1].Max_output = 1.0;
 PID_regulator[1].Min_output = 0.01;
@@ -83,7 +83,7 @@ Line_regulator.Min_output = 0.02;
 Line_regulator.Max_sum_error = 2.0;
 Line_regulator.prev_error = 0.0;
 Line_regulator.sum_error = 0.0;
-Line_regulator.pid_error_end = 0.01;
+Line_regulator.pid_error_end = 0.001;
 }
 
 
