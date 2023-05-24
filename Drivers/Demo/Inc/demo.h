@@ -2,14 +2,14 @@
 #include "stdbool.h"
 #include "ssd1306.h"
 #include <stdio.h>
+#include "Programs.h"
+
 
 extern const uint8_t indicator_X;
 extern uint8_t indicator_Y;
 
-extern uint8_t number_program;
-
-extern uint8_t number_clicks_button5;
-
+extern char speed_str[5];
+extern char dist_str[5];
 
 void FirstScreen();
 
@@ -25,9 +25,11 @@ void ParameterMenu(uint8_t value);
 
 void SelectParameter(bool IsUp);
 
-void ScreenExecution(uint8_t value);
+void ScreenExecution(void);
 
 void ProgressBar(float progress);
+
+void FloatToChar(float number, char* string);
 
 
 

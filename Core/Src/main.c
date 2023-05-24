@@ -28,6 +28,8 @@
 /* USER CODE BEGIN Includes */
 #include "ssd1306.h"
 #include "demo.h"
+#include "Regulator.h"
+#include "Programs.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,7 +98,17 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_USART2_UART_Init();
+  MX_TIM4_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
+
+
+
+
+  Robot_Init();
+  robot.demo.constructor = &ConstrctionProgram;
+  robot.demo.destructor = &DestrctionProgram;
+
   SSD1306_Init();
 
   FirstScreen();
@@ -109,13 +121,10 @@ int main(void)
   SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 13, SSD1306_COLOR_WHITE);
   ShowMenuItems();
 
-
-  //ScreenExecution(number_program);
-
   SSD1306_UpdateScreen();
 
 
-
+//  PID_Init();
 
 
 
