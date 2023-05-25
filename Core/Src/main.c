@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -30,6 +31,7 @@
 #include "demo.h"
 #include "Regulator.h"
 #include "Programs.h"
+#include "ADC_Bottom.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,7 +102,9 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+
 
 
 
@@ -127,14 +131,38 @@ int main(void)
 //  PID_Init();
 
 
-
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  ADC_Read(4);
+	  HAL_ADC_Start(&hadc1);
+
+	  HAL_ADC_PollForConversion(&hadc1, 100);
+
+	  robot.ADC_Values[1] = (uint32_t) HAL_ADC_GetValue(&hadc1);
+
+	  HAL_ADC_Stop(&hadc1);
+
+	  HAL_Delay(500);
+
+	  ADC_Read(1);
+	  HAL_ADC_Start(&hadc1);
+
+	  HAL_ADC_PollForConversion(&hadc1, 100);
+
+	  robot.ADC_Values[3] = (uint32_t) HAL_ADC_GetValue(&hadc1);
+
+	  HAL_ADC_Stop(&hadc1);
+
+	  HAL_Delay(500);
+//
+//	  Line_regulator.current = robot.ADC_Values[1] - robot.ADC_Values[3];
+
+
+
 
     /* USER CODE END WHILE */
 

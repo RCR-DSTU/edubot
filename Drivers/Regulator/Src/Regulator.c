@@ -76,7 +76,7 @@ Line_regulator.K_p = 0.15;
 Line_regulator.I_p = 0.1;
 Line_regulator.D_p = 0.0;
 Line_regulator.current = 0.0;
-Line_regulator.target = robot.input_arg;
+Line_regulator.target = 0.0;
 Line_regulator.error = 0.0;
 Line_regulator.Max_output = 0.04;
 Line_regulator.Min_output = 0.02;
@@ -120,9 +120,7 @@ Line_regulator.output = (Line_regulator.K_p * Line_regulator.error) + (Line_regu
 if(Line_regulator.output < -Line_regulator.Max_output) Line_regulator.output = Line_regulator.Min_output;
 if(Line_regulator.output > Line_regulator.Max_output) Line_regulator.output = Line_regulator.Max_output;
 Line_regulator.prev_error = Line_regulator.error;
-if(Line_regulator.error <= Line_regulator.pid_error_end &&
-   Line_regulator.error >= -Line_regulator.pid_error_end) Line_regulator.pid_finish = 1;
-else Line_regulator.pid_finish = 0;
+
 }
 
 

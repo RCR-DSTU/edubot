@@ -20,6 +20,8 @@ typedef struct{
 	float speed;
 	float distanse;
 	float progress;
+	uint16_t ADC_Values[5];
+	float dist[2];
 	Program demo;
 }EduBot;
 
@@ -33,3 +35,9 @@ void ConstrctionProgram(void);
 void DestrctionProgram(void);
 
 void RunnerProgram1(void);
+
+void InformationForProgram1(void);
+
+void RunnerProgram2(void);
+
+void InformationForProgram2(void);

@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "demo.h"
 #include "Regulator.h"
+#include "adc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +44,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-float dist[2];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -319,32 +320,18 @@ void EXTI15_10_IRQHandler(void)
 void TIM5_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
+
 	Enc[0] = TIM2->CNT;
 	Enc[1] = TIM3->CNT;
 
 	wheel_angle[0] = Enc[0] * disk_to_real; // angle distanse
 	wheel_v[0] = wheel_angle[0] / 0.01;
 
-	dist[0] += wheel_angle[0];
-
 	wheel_angle[1] = Enc[1] * disk_to_real; // angle distanse
 	wheel_v[1] = wheel_angle[1] / 0.01;
 
-	dist[1] += wheel_angle[1];
-
 	PID_regulator[0].current = -wheel_v[0];
 	PID_regulator[1].current = wheel_v[1];
-
-	Line_regulator.current = (-dist[0] + dist[1]) / 2;
-
-	robot.distanse = Line_regulator.current; // Distance to screen
-
-	robot.speed = (-wheel_v[0] + wheel_v[1]) / 2; // Speed to screen
-
-	robot.progress = Line_regulator.current / Line_regulator.target; // Progress bar
-
-	TIM2->CNT = 0;
-	TIM3->CNT = 0;
 
 	if(robot.isStart){
 		robot.demo.runner();
@@ -352,6 +339,26 @@ void TIM5_IRQHandler(void)
 	else{
 		robot.demo.destructor();
 	}
+
+	switch(robot.currentProg + 1)
+	{
+		case 1:
+			InformationForProgram1();
+			break;
+		case 2:
+			InformationForProgram2();
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+	}
+
+
 
 
 	//PID_regulator[1].target = goal;
