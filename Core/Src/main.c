@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -101,8 +102,9 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   MX_USART2_UART_Init();
   MX_TIM4_Init();
-  MX_TIM5_Init();
+  MX_DMA_Init();
   MX_ADC1_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -137,30 +139,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  ADC_Read(4);
-	  HAL_ADC_Start(&hadc1);
 
-	  HAL_ADC_PollForConversion(&hadc1, 100);
+	ADC_Read(4);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&robot.ADC_Values[0][0], 2);
+	HAL_Delay(5);
 
-	  robot.ADC_Values[1] = (uint32_t) HAL_ADC_GetValue(&hadc1);
-
-	  HAL_ADC_Stop(&hadc1);
-
-	  HAL_Delay(500);
-
-	  ADC_Read(1);
-	  HAL_ADC_Start(&hadc1);
-
-	  HAL_ADC_PollForConversion(&hadc1, 100);
-
-	  robot.ADC_Values[3] = (uint32_t) HAL_ADC_GetValue(&hadc1);
-
-	  HAL_ADC_Stop(&hadc1);
-
-	  HAL_Delay(500);
-//
-//	  Line_regulator.current = robot.ADC_Values[1] - robot.ADC_Values[3];
-
+	ADC_Read(1);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&robot.ADC_Values[1][0], 2);
+	HAL_Delay(5);
 
 
 

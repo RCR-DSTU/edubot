@@ -53,18 +53,6 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, MULPLXA_PIN_Pin|MULPLXB_PIN_Pin|MULPLXC_PIN_Pin|BTN1_DIR_Pin
                           |BTN2_DIR_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = POT_PIN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(POT_PIN_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = ADC_TOP_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(ADC_TOP_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pins : PBPin PBPin PBPin PBPin */
   GPIO_InitStruct.Pin = EXTI1_Pin|EXTI2_Pin|EXTI3_Pin|EXTI4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;

@@ -59,6 +59,7 @@ void ConstrctionProgram(void) {
 
 			robot.isStart = true;
 
+			Line_regulator.Max_output = 0.03;
 			Line_regulator.target = 75;
 
 			HAL_TIM_Base_Start_IT(&htim5);
@@ -207,6 +208,7 @@ void InformationForProgram1(void)
 
 	robot.progress = Line_regulator.current / Line_regulator.target; // Progress bar
 
+
 	TIM2->CNT = 0;
 	TIM3->CNT = 0;
 }
@@ -215,53 +217,25 @@ void InformationForProgram1(void)
 
 void RunnerProgram2(void)
 {
-	if(Line_regulator.pid_finish)
-	{
-		PID_regulator[0].target = 0.0;
-		PID_regulator[1].target = 0.0;
-		Line_regulator.target = 0.0;
-		Line_regulator.sum_error = 0.0;
-		SetVoltage_Left(0.0);
-		SetVoltage_Right(0.0);
-		robot.isStart = false;
-
-	} else
-	{
 		PID_Calc();
-		PID_regulator[0].target = 0.2 + Line_regulator.output;
-		PID_regulator[1].target = 0.2 - Line_regulator.output;
+		PID_regulator[0].target = 0.02 + Line_regulator.output;
+		PID_regulator[1].target = 0.02 - Line_regulator.output;
 		SetVoltage_Left(PID_regulator[0].output);
 		SetVoltage_Right(PID_regulator[1].output);
-
-	}
 }
 
 
 void InformationForProgram2(void)
 {
 	ADC_Read(4);
-	HAL_ADC_Start(&hadc1);
-
-	HAL_ADC_PollForConversion(&hadc1, 100);
-
-	robot.ADC_Values[1] = (uint32_t) HAL_ADC_GetValue(&hadc1);
-
-	HAL_ADC_Stop(&hadc1);
-
-	HAL_Delay(200);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&robot.ADC_Values[0][0], 2);
+	HAL_Delay(1);
 
 	ADC_Read(1);
-	HAL_ADC_Start(&hadc1);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&robot.ADC_Values[1][0], 2);
+	HAL_Delay(1);
 
-	HAL_ADC_PollForConversion(&hadc1, 100);
-
-	robot.ADC_Values[3] = (uint32_t) HAL_ADC_GetValue(&hadc1);
-
-	HAL_ADC_Stop(&hadc1);
-
-	HAL_Delay(200);
-
-	Line_regulator.current = robot.ADC_Values[1] - robot.ADC_Values[3];
+	//Line_regulator.current = robot.ADC_Values[1] - robot.ADC_Values[3];
 
 }
 

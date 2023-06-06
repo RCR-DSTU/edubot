@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Regulator.h"
+#include "stm32f4xx_hal.h"
 
 
 typedef struct{
@@ -20,8 +21,9 @@ typedef struct{
 	float speed;
 	float distanse;
 	float progress;
-	uint16_t ADC_Values[5];
+	uint16_t ADC_Values[8][2];
 	float dist[2];
+	uint32_t AD_RES[3];
 	Program demo;
 }EduBot;
 

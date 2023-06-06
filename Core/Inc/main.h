@@ -65,14 +65,10 @@ void Error_Handler(void);
 #define TX3_PIN_GPIO_Port GPIOA
 #define RX3_PIN_Pin GPIO_PIN_3
 #define RX3_PIN_GPIO_Port GPIOA
-#define POT_PIN_Pin GPIO_PIN_4
-#define POT_PIN_GPIO_Port GPIOA
 #define ENCODER2A_PIN_Pin GPIO_PIN_6
 #define ENCODER2A_PIN_GPIO_Port GPIOA
 #define ENCODER2B_PIN_Pin GPIO_PIN_7
 #define ENCODER2B_PIN_GPIO_Port GPIOA
-#define ADC_TOP_Pin GPIO_PIN_0
-#define ADC_TOP_GPIO_Port GPIOB
 #define ADC_BOTTOM_Pin GPIO_PIN_1
 #define ADC_BOTTOM_GPIO_Port GPIOB
 #define EXTI1_Pin GPIO_PIN_2
