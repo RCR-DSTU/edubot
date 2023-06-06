@@ -350,6 +350,7 @@ void TIM5_IRQHandler(void)
 			InformationForProgram2();
 			break;
 		case 3:
+			InformationForProgram3();
 			break;
 		case 4:
 			break;

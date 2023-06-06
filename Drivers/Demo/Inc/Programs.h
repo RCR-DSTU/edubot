@@ -21,9 +21,8 @@ typedef struct{
 	float speed;
 	float distanse;
 	float progress;
-	uint16_t ADC_Values[8][2];
+	float ADC_Values[8][2];
 	float dist[2];
-	uint32_t AD_RES[3];
 	Program demo;
 }EduBot;
 
@@ -43,3 +42,7 @@ void InformationForProgram1(void);
 void RunnerProgram2(void);
 
 void InformationForProgram2(void);
+
+void RunnerProgram3(void);
+
+void InformationForProgram3(void);
