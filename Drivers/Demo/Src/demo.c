@@ -20,7 +20,6 @@ uint8_t indicator_Y = 16;
 const uint8_t progress_bar_X = 14;
 uint8_t progress_bar_Y = 43;
 
-char str[4];
 char speed_str[5];
 char dist_str[5];
 
@@ -126,9 +125,9 @@ void ParameterMenu(uint8_t value)
 	SSD1306_GotoXY(71, 20);
 	SSD1306_Puts(names_parameters[value], &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_GotoXY(56, 34);
-	sprintf(str, "%.1f", robot.input_arg);
-	SSD1306_Puts(str, &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_UpdateScreen();
+	char tmp[5];
+	FloatToChar(robot.input_arg, tmp);
+	SSD1306_Puts(tmp, &Font_7x10, SSD1306_COLOR_WHITE);
 }
 
 

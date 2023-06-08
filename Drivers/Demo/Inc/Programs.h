@@ -7,9 +7,11 @@ typedef struct{
 	void (*constructor)(void);
 	void (*destructor)(void);
 	void (*runner)(void);
+	void (*draw)(void);
 }Program;
 
 typedef struct{
+	uint8_t globalState;
 	bool isStart;
 	uint32_t globalTime;
 	uint8_t currentProg;
@@ -41,3 +43,7 @@ void InformationForProgram1(void);
 void RunnerProgram2(void);
 
 void InformationForProgram2(void);
+
+void DrawProgram1(void);
+
+void DrawProgram2(void);

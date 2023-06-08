@@ -18,7 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -56,13 +58,14 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint16_t AD_RES[3];
 /* USER CODE END 0 */
 
 /**
@@ -100,64 +103,41 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_USART2_UART_Init();
-  MX_TIM4_Init();
-  MX_TIM5_Init();
+  MX_DMA_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
-
-
-
-
-  Robot_Init();
-  robot.demo.constructor = &ConstrctionProgram;
-  robot.demo.destructor = &DestrctionProgram;
-
-  SSD1306_Init();
-
-  FirstScreen();
-  SSD1306_UpdateScreen();
-
-  HAL_Delay(4000);
-  SSD1306_Fill(SSD1306_COLOR_BLACK);
-
-  MenuRectangle();
-  SSD1306_DrawFilledRectangle(indicator_X, indicator_Y, 110, 13, SSD1306_COLOR_WHITE);
-  ShowMenuItems();
-
-  SSD1306_UpdateScreen();
-
-
-//  PID_Init();
-
-
   /* USER CODE END 2 */
 
+  /* Init scheduler */
+  osKernelInitialize();  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  ADC_Read(4);
-	  HAL_ADC_Start(&hadc1);
+//	  ADC_Read(1);
+//	  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)AD_RES, 3);
+//	  HAL_Delay(1);
 
-	  HAL_ADC_PollForConversion(&hadc1, 100);
+//	  ADC_Read(1);
+//	  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)AD_RES, 2);
+//	  HAL_Delay(1);
+//	  robot.ADC_Values[1] = (uint32_t) HAL_ADC_GetValue(&hadc1);
+//
+//	  HAL_ADC_Stop(&hadc1);
 
-	  robot.ADC_Values[1] = (uint32_t) HAL_ADC_GetValue(&hadc1);
+	 // HAL_Delay(500);
+//	  robot.ADC_Values[3] = (uint32_t) HAL_ADC_GetValue(&hadc1);
+//
+//	  HAL_ADC_Stop(&hadc1);
 
-	  HAL_ADC_Stop(&hadc1);
-
-	  HAL_Delay(500);
-
-	  ADC_Read(1);
-	  HAL_ADC_Start(&hadc1);
-
-	  HAL_ADC_PollForConversion(&hadc1, 100);
-
-	  robot.ADC_Values[3] = (uint32_t) HAL_ADC_GetValue(&hadc1);
-
-	  HAL_ADC_Stop(&hadc1);
-
-	  HAL_Delay(500);
+	  //HAL_Delay(500);
 //
 //	  Line_regulator.current = robot.ADC_Values[1] - robot.ADC_Values[3];
 
@@ -219,6 +199,27 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM4 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM4) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

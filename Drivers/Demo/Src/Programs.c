@@ -45,11 +45,9 @@ void ConstrctionProgram(void) {
 			robot.isStart = true;
 			Line_regulator.target = robot.input_arg;
 
-			HAL_TIM_Base_Start_IT(&htim5);
-
+//			HAL_TIM_Base_Start_IT(&htim5);
 			robot.demo.runner = &RunnerProgram1;
-			ScreenExecution();
-			SSD1306_UpdateScreen();
+			robot.demo.draw = &DrawProgram1;
 			break;
 		case 2:
 			PID_Init();
@@ -61,13 +59,10 @@ void ConstrctionProgram(void) {
 
 			Line_regulator.target = 75;
 
-			HAL_TIM_Base_Start_IT(&htim5);
+//			HAL_TIM_Base_Start_IT(&htim5);
 
 			robot.demo.runner = &RunnerProgram2;
-			ScreenExecution();
-			SSD1306_UpdateScreen();
-
-
+			robot.demo.draw = &DrawProgram2;
 			break;
 		case 3:
 			break;
@@ -99,7 +94,7 @@ void DestrctionProgram(void) {
 
 			Line_regulator.target = 0.0;
 
-			HAL_TIM_Base_Stop_IT(&htim5);
+//			HAL_TIM_Base_Stop_IT(&htim5);
 
 
 			robot.demo.runner = 0;
@@ -109,7 +104,7 @@ void DestrctionProgram(void) {
 			HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_1);
 			HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_2);
 
-			HAL_TIM_Base_Stop_IT(&htim5);
+//			HAL_TIM_Base_Stop_IT(&htim5);
 
 			Line_regulator.target = 0.0;
 
@@ -139,7 +134,6 @@ void RunnerProgram1(void){
 		SetVoltage_Left(0.0);
 		SetVoltage_Right(0.0);
 		robot.isStart = false;
-
 	} else
 	{
 		PID_Calc();
@@ -151,45 +145,7 @@ void RunnerProgram1(void){
 		PID_regulator[1].target = Line_regulator.output;
 		SetVoltage_Left(PID_regulator[0].output);
 		SetVoltage_Right(PID_regulator[1].output);
-
 	}
-
-	switch(robot.currentCycle)
-	{
-		case 0:
-			ProgressBar(robot.progress);
-			robot.currentCycle++;
-			break;
-		case 1:
-			FloatToChar(robot.speed, speed_str);
-			robot.currentCycle++;
-			break;
-		case 2:
-			FloatToChar(robot.distanse, dist_str);
-			robot.currentCycle++;
-			break;
-		case 3:
-			SSD1306_GotoXY(10, 30);
-			SSD1306_Puts("Distance:", &Font_7x10, SSD1306_COLOR_WHITE);
-			SSD1306_GotoXY(75, 30);
-			FloatToChar(robot.distanse, dist_str);
-			SSD1306_Puts(dist_str, &Font_7x10, SSD1306_COLOR_WHITE);
-			SSD1306_UpdateScreen();
-			robot.currentCycle++;
-			break;
-		case 4:
-			SSD1306_GotoXY(10, 18);
-			SSD1306_Puts("Speed:", &Font_7x10, SSD1306_COLOR_WHITE);
-			SSD1306_GotoXY(54, 18);
-			FloatToChar(robot.speed, speed_str);
-			SSD1306_Puts(speed_str, &Font_7x10, SSD1306_COLOR_WHITE);
-			SSD1306_UpdateScreen();
-			robot.currentCycle = 0;
-			break;
-
-	}
-
-
 }
 
 
@@ -219,6 +175,8 @@ void RunnerProgram2(void)
 	{
 		PID_regulator[0].target = 0.0;
 		PID_regulator[1].target = 0.0;
+		PID_regulator[0].current = 0.0;
+		PID_regulator[1].current = 0.0;
 		Line_regulator.target = 0.0;
 		Line_regulator.sum_error = 0.0;
 		SetVoltage_Left(0.0);
@@ -265,9 +223,81 @@ void InformationForProgram2(void)
 
 }
 
+void DrawProgram1(void)
+{
+	switch(robot.currentCycle)
+	{
+		case 0:
+			ProgressBar(robot.progress);
+			robot.currentCycle++;
+			break;
+		case 1:
+			FloatToChar(robot.speed, speed_str);
+			robot.currentCycle++;
+			break;
+		case 2:
+			FloatToChar(robot.distanse, dist_str);
+			robot.currentCycle++;
+			break;
+		case 3:
+			SSD1306_GotoXY(10, 30);
+			SSD1306_Puts("Distance:", &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_GotoXY(75, 30);
+			FloatToChar(robot.distanse, dist_str);
+			SSD1306_Puts(dist_str, &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_UpdateScreen();
+			robot.currentCycle++;
+			break;
+		case 4:
+			SSD1306_GotoXY(10, 18);
+			SSD1306_Puts("Speed:", &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_GotoXY(54, 18);
+			FloatToChar(robot.speed, speed_str);
+			SSD1306_Puts(speed_str, &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_UpdateScreen();
+			robot.currentCycle = 0;
+			break;
 
+	}
+}
 
+void DrawProgram2(void)
+{
+	switch(robot.currentCycle)
+	{
+		case 0:
+			ProgressBar(robot.progress);
+			robot.currentCycle++;
+			break;
+		case 1:
+			FloatToChar(robot.speed, speed_str);
+			robot.currentCycle++;
+			break;
+		case 2:
+			FloatToChar(robot.distanse, dist_str);
+			robot.currentCycle++;
+			break;
+		case 3:
+			SSD1306_GotoXY(10, 30);
+			SSD1306_Puts("Distance:", &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_GotoXY(75, 30);
+			FloatToChar(robot.distanse, dist_str);
+			SSD1306_Puts(dist_str, &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_UpdateScreen();
+			robot.currentCycle++;
+			break;
+		case 4:
+			SSD1306_GotoXY(10, 18);
+			SSD1306_Puts("Speed:", &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_GotoXY(54, 18);
+			FloatToChar(robot.speed, speed_str);
+			SSD1306_Puts(speed_str, &Font_7x10, SSD1306_COLOR_WHITE);
+			SSD1306_UpdateScreen();
+			robot.currentCycle = 0;
+			break;
 
+	}
+}
 
 
 

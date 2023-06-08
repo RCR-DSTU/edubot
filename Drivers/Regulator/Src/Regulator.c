@@ -84,6 +84,7 @@ Line_regulator.Max_sum_error = 2.0;
 Line_regulator.prev_error = 0.0;
 Line_regulator.sum_error = 0.0;
 Line_regulator.pid_error_end = 0.001;
+Line_regulator.pid_finish = 0;
 }
 
 

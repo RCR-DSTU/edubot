@@ -58,8 +58,9 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim4;
-extern TIM_HandleTypeDef htim5;
+
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -143,19 +144,6 @@ void UsageFault_Handler(void)
 }
 
 /**
-  * @brief This function handles System service call via SWI instruction.
-  */
-void SVC_Handler(void)
-{
-  /* USER CODE BEGIN SVCall_IRQn 0 */
-
-  /* USER CODE END SVCall_IRQn 0 */
-  /* USER CODE BEGIN SVCall_IRQn 1 */
-
-  /* USER CODE END SVCall_IRQn 1 */
-}
-
-/**
   * @brief This function handles Debug monitor.
   */
 void DebugMon_Handler(void)
@@ -166,33 +154,6 @@ void DebugMon_Handler(void)
   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
 
   /* USER CODE END DebugMonitor_IRQn 1 */
-}
-
-/**
-  * @brief This function handles Pendable request for system service.
-  */
-void PendSV_Handler(void)
-{
-  /* USER CODE BEGIN PendSV_IRQn 0 */
-
-  /* USER CODE END PendSV_IRQn 0 */
-  /* USER CODE BEGIN PendSV_IRQn 1 */
-
-  /* USER CODE END PendSV_IRQn 1 */
-}
-
-/**
-  * @brief This function handles System tick timer.
-  */
-void SysTick_Handler(void)
-{
-  /* USER CODE BEGIN SysTick_IRQn 0 */
-
-  /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
-
-  /* USER CODE END SysTick_IRQn 1 */
 }
 
 /******************************************************************************/
@@ -214,8 +175,6 @@ void EXTI2_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(EXTI1_Pin);
   /* USER CODE BEGIN EXTI2_IRQn 1 */
   Indicator(true);
-  NewFrameMenu();
-
   /* USER CODE END EXTI2_IRQn 1 */
 }
 
@@ -231,7 +190,7 @@ void EXTI3_IRQHandler(void)
   /* USER CODE BEGIN EXTI3_IRQn 1 */
   HAL_GPIO_EXTI_IRQHandler(EXTI2_Pin);
   SelectParameter(false);
-  ParameterMenu(robot.currentProg);
+
   /* USER CODE END EXTI3_IRQn 1 */
 }
 
@@ -247,7 +206,7 @@ void EXTI4_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_IRQn 1 */
   HAL_GPIO_EXTI_IRQHandler(EXTI3_Pin);
   SelectParameter(true);
-  ParameterMenu(robot.currentProg);
+
 
   /* USER CODE END EXTI4_IRQn 1 */
 }
@@ -262,8 +221,8 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE END EXTI9_5_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(EXTI4_Pin);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
-	Indicator(false);
-	NewFrameMenu();
+  Indicator(false);
+
   /* USER CODE END EXTI9_5_IRQn 1 */
 }
 
@@ -296,12 +255,12 @@ void EXTI15_10_IRQHandler(void)
 		switch(robot.number_clicks_button5)
 		{
 			case 0:
-				ParameterMenu(robot.currentProg);
+				robot.globalState++;
 				robot.number_clicks_button5 += 1;
 				break;
 			case 1:
 				robot.number_clicks_button5 -= 1;
-				robot.demo.constructor();
+				robot.globalState = 2;
 				break;
 		}
 
@@ -315,60 +274,17 @@ void EXTI15_10_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM5 global interrupt.
+  * @brief This function handles DMA2 stream0 global interrupt.
   */
-void TIM5_IRQHandler(void)
+void DMA2_Stream0_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM5_IRQn 0 */
+  /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
 
-	Enc[0] = TIM2->CNT;
-	Enc[1] = TIM3->CNT;
+  /* USER CODE END DMA2_Stream0_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_adc1);
+  /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
 
-	wheel_angle[0] = Enc[0] * disk_to_real; // angle distanse
-	wheel_v[0] = wheel_angle[0] / 0.01;
-
-	wheel_angle[1] = Enc[1] * disk_to_real; // angle distanse
-	wheel_v[1] = wheel_angle[1] / 0.01;
-
-	PID_regulator[0].current = -wheel_v[0];
-	PID_regulator[1].current = wheel_v[1];
-
-	if(robot.isStart){
-		robot.demo.runner();
-	}
-	else{
-		robot.demo.destructor();
-	}
-
-	switch(robot.currentProg + 1)
-	{
-		case 1:
-			InformationForProgram1();
-			break;
-		case 2:
-			InformationForProgram2();
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		case 5:
-			break;
-		case 6:
-			break;
-	}
-
-
-
-
-	//PID_regulator[1].target = goal;
-
-
-  /* USER CODE END TIM5_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim5);
-  /* USER CODE BEGIN TIM5_IRQn 1 */
-
-  /* USER CODE END TIM5_IRQn 1 */
+  /* USER CODE END DMA2_Stream0_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
