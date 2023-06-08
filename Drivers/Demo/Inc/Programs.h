@@ -22,7 +22,7 @@ typedef struct{
 	float speed;
 	float distanse;
 	float progress;
-	uint16_t ADC_Values[5];
+	uint16_t ADC_Values[8][2];
 	float dist[2];
 	Program demo;
 }EduBot;

@@ -124,7 +124,7 @@ void ParameterMenu(uint8_t value)
 	SSD1306_Puts("Select ", &Font_7x10, SSD1306_COLOR_WHITE);
 	SSD1306_GotoXY(71, 20);
 	SSD1306_Puts(names_parameters[value], &Font_7x10, SSD1306_COLOR_WHITE);
-	SSD1306_GotoXY(56, 34);
+	SSD1306_GotoXY(45, 34);
 	char tmp[5];
 	FloatToChar(robot.input_arg, tmp);
 	SSD1306_Puts(tmp, &Font_7x10, SSD1306_COLOR_WHITE);

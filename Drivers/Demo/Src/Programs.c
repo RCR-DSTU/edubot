@@ -91,8 +91,21 @@ void DestrctionProgram(void) {
 			HAL_TIM_Encoder_Stop(&htim3, TIM_CHANNEL_2);
 
 			robot.distanse = 0.0;
+			robot.speed = 0.0;
 
 			Line_regulator.target = 0.0;
+			Line_regulator.current = 0.0;
+
+			robot.dist[0] = 0.0;
+			robot.dist[1] = 0.0;
+
+			wheel_angle[0] = 0.0;
+			wheel_v[0] = 0.0;
+
+			wheel_angle[1] = 0.0;
+			wheel_v[1] = 0.0;
+
+			robot.progress = 0.0;
 
 //			HAL_TIM_Base_Stop_IT(&htim5);
 
@@ -186,8 +199,8 @@ void RunnerProgram2(void)
 	} else
 	{
 		PID_Calc();
-		PID_regulator[0].target = 0.2 + Line_regulator.output;
-		PID_regulator[1].target = 0.2 - Line_regulator.output;
+		PID_regulator[0].target = 0.02 + Line_regulator.output;
+		PID_regulator[1].target = 0.02 - Line_regulator.output;
 		SetVoltage_Left(PID_regulator[0].output);
 		SetVoltage_Right(PID_regulator[1].output);
 
@@ -198,28 +211,12 @@ void RunnerProgram2(void)
 void InformationForProgram2(void)
 {
 	ADC_Read(4);
-	HAL_ADC_Start(&hadc1);
-
-	HAL_ADC_PollForConversion(&hadc1, 100);
-
-	robot.ADC_Values[1] = (uint32_t) HAL_ADC_GetValue(&hadc1);
-
-	HAL_ADC_Stop(&hadc1);
-
-	HAL_Delay(200);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&robot.ADC_Values[0][0], 2);
+	HAL_Delay(1);
 
 	ADC_Read(1);
-	HAL_ADC_Start(&hadc1);
-
-	HAL_ADC_PollForConversion(&hadc1, 100);
-
-	robot.ADC_Values[3] = (uint32_t) HAL_ADC_GetValue(&hadc1);
-
-	HAL_ADC_Stop(&hadc1);
-
-	HAL_Delay(200);
-
-	Line_regulator.current = robot.ADC_Values[1] - robot.ADC_Values[3];
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&robot.ADC_Values[1][0], 2);
+	HAL_Delay(1);
 
 }
 

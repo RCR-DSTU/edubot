@@ -260,7 +260,7 @@ void EXTI15_10_IRQHandler(void)
 				break;
 			case 1:
 				robot.number_clicks_button5 -= 1;
-				robot.globalState = 2;
+				robot.globalState = 3;
 				break;
 		}
 

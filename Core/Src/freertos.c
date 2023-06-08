@@ -180,6 +180,7 @@ void MX_FREERTOS_Init(void) {
   * @retval None
   */
 /* USER CODE END Header_StartTask */
+#define TEST
 void StartTask(void *argument)
 {
   /* USER CODE BEGIN StartTask */
@@ -187,6 +188,10 @@ void StartTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+#ifdef TEST
+	  demo2Handle = osThreadNew(Program2Task, NULL, &demo2_attributes);
+	  osThreadSuspend(defaultTaskHandle);
+#else
 	  Robot_Init();
 
 	  osThreadResume(DisplayHandle);
@@ -203,7 +208,7 @@ void StartTask(void *argument)
 	  osThreadResume(DisplayHandle);
 	  osThreadResume(demo1Handle);
 	  osThreadSuspend(defaultTaskHandle);
-
+#endif
   }
   /* USER CODE END StartTask */
 }
@@ -297,6 +302,7 @@ void Program1Task(void *argument)
 			osTimerStop(SpeedPIDHandle);
 			robot.demo.destructor();
 			osThreadResume(defaultTaskHandle);
+			osDelay(500 / portTICK_RATE_MS);
 			break;
 		}
 		InformationForProgram1();
@@ -316,11 +322,27 @@ void Program1Task(void *argument)
 void Program2Task(void *argument)
 {
   /* USER CODE BEGIN Program2Task */
+	osTimerStart(LinePIDHandle, (10 / portTICK_RATE_MS));
+
+	robot.demo.constructor();
   /* Infinite loop */
   for(;;)
   {
-	  //				InformationForProgram2();
-    osDelay(1);
+		if(robot.isStart){
+			robot.demo.runner();
+		}
+		else
+		{
+			robot.globalState = 1;
+			osThreadSuspend(DisplayHandle);
+			osTimerStop(LinePIDHandle);
+			robot.demo.destructor();
+			osThreadResume(defaultTaskHandle);
+			osDelay(500 / portTICK_RATE_MS);
+			break;
+	}
+	InformationForProgram2();
+	osDelay(50 / portTICK_RATE_MS);
   }
   /* USER CODE END Program2Task */
 }
